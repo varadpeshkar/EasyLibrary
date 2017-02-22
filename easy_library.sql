@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.6.5.2
--- https://www.phpmyadmin.net/
+-- version 4.5.4.1deb2ubuntu2
+-- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Feb 14, 2017 at 12:06 AM
--- Server version: 10.1.21-MariaDB
--- PHP Version: 5.6.30
+-- Generation Time: Feb 22, 2017 at 10:55 AM
+-- Server version: 5.7.17-0ubuntu0.16.04.1
+-- PHP Version: 7.0.13-0ubuntu0.16.04.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -53,7 +53,8 @@ CREATE TABLE `admin_users` (
 --
 
 INSERT INTO `admin_users` (`user_id`, `session_id`, `user_name`, `user_password_hash`, `user_email`, `user_active`, `user_deleted`, `user_account_type`, `user_has_avatar`, `user_remember_me_token`, `user_creation_timestamp`, `user_suspension_timestamp`, `user_last_login_timestamp`, `user_failed_logins`, `user_last_failed_login`, `user_activation_hash`, `user_password_reset_hash`, `user_password_reset_timestamp`, `user_provider_type`) VALUES
-(12, 'ikkgjl0v2jfvkc7t6h38odl7a7', 'chinmay', '$2y$10$h.t9OcewTr.dT7yJ0BgJQer0oDfnrJ7WAARDr7FcLFMnFH6O3aEf.', 'chinmay@asd.com', 1, 0, 7, 0, NULL, 1487021135, NULL, 1487026703, 0, NULL, '62d1d806c98c689761b45c13f33d3df0599604e1', NULL, NULL, 'DEFAULT');
+(12, 'ikkgjl0v2jfvkc7t6h38odl7a7', 'chinmay', '$2y$10$h.t9OcewTr.dT7yJ0BgJQer0oDfnrJ7WAARDr7FcLFMnFH6O3aEf.', 'chinmay@asd.com', 1, 0, 7, 0, NULL, 1487021135, NULL, 1487026703, 0, NULL, '62d1d806c98c689761b45c13f33d3df0599604e1', NULL, NULL, 'DEFAULT'),
+(13, 'g7jahm75855uc8jrbv9fbc76o2', 'rohan', '$2y$10$ydOYH.ZuxK9v6EAR98Tsg..kVyOFwdRHgHD9qdSuaue9ayvmhgxD.', 'rohan@aveshan.com', 1, 0, 1, 0, NULL, 1487158128, NULL, 1487586716, 0, NULL, 'd7743d3158ad230c027d8f8f7f2564b6b70bd626', NULL, NULL, 'DEFAULT');
 
 -- --------------------------------------------------------
 
@@ -77,18 +78,15 @@ CREATE TABLE `books` (
 --
 
 INSERT INTO `books` (`id`, `isbn`, `name`, `author`, `publisher`, `department`, `tags`, `timestamp`) VALUES
-(1, '123123', 'asdasd', 'dsadsa', 'sdasd', 'fwefw', 'asd,asdasd,asdasd', '2017-02-13 22:14:20'),
-(2, '1234234', 'asdgasdq', 'asdagas', 'sfasfdfq', 'adasdasdadgsdv', 'dfasdbsffaf', '2017-02-13 22:14:20'),
-(3, 'III', 'BBB', 'AAA', 'PPP', 'DDD', '', '2017-02-13 22:50:04'),
-(4, 'III', 'BBB', 'AAA', 'PPP', 'DDD', '', '2017-02-13 22:50:43'),
-(5, 'Ism', 'Okay', 'No No', 'Poop', 'Doom', '', '2017-02-13 22:51:13'),
-(6, 'Ism', 'Okay', 'No No', 'Poop', 'Doom', '', '2017-02-13 22:52:07'),
-(7, 'sdfsdf', 'asdas', 'dasdasd', 'asdasd', 'asdasd', '', '2017-02-13 22:52:19'),
-(8, 'sdfsdf', 'asdas', 'dasdasd', 'asdasd', 'asdasd', '', '2017-02-13 22:53:13'),
-(9, 'Ism', 'Okay', 'No No', 'Poop', 'Doom', '', '2017-02-13 22:53:21'),
-(10, 'Ism', 'Okay', 'No No', 'Poop', 'Doom', '', '2017-02-13 22:56:09'),
-(11, 'Ism', 'Okay', 'No No', 'Poop', 'Doom', '', '2017-02-13 22:56:39'),
-(12, 'Ism', 'Okay', 'No No', 'Poop', 'Doom', '', '2017-02-13 22:57:47');
+(32, '1131165175', 'Discrete Structures', 'J.P.Mathew', 'Arihant', 'Computer Eng.', 'some, tag', '2017-02-18 20:05:31'),
+(33, '1133365565', 'Refrigeration and Air Conditioning', 'Akanksha Bhaskar', 'Tata McgraHills', 'Mech. Eng.', 'some, tag', '2017-02-18 20:05:31'),
+(34, '1133995175', 'Basics of Automobile Engineering', 'Arunima Sinha', 'Tata McgraHills', 'Mech. Eng.', 'some, tag', '2017-02-18 20:05:32'),
+(35, '1135875175', 'Wireless Sensor Networks', 'John Mathai', 'Nirali', 'Entc Eng.', 'some, tag', '2017-02-18 20:05:32'),
+(36, '1422580423', 'Sensors in Intrumentation', 'Debashish Sen', 'Nirali', 'Entc Eng.', 'some, tag', '2017-02-18 20:05:32'),
+(37, '1422470432', 'Basics of Electronics', 'Robert Dahl', 'Tata McgraHills', 'Entc Eng.', 'some, tag', '2017-02-18 20:05:32'),
+(38, '1422470431', 'Design of Steel Structures', 'Unmesh Banerjee', 'Tata McgraHills', 'Civil Eng.', 'some, tag', '2017-02-18 20:05:32'),
+(39, '1454838094', 'Basic Surveying', 'Girish Dandavate', 'Tata McgraHills', 'Civil Eng.', 'some, tag', '2017-02-18 20:05:32'),
+(40, '1133365175', 'Data Structures', 'Julie Moncada', 'Arihant', 'Computer Eng.', 'some, tag', '2017-02-18 20:05:32');
 
 -- --------------------------------------------------------
 
@@ -112,8 +110,15 @@ CREATE TABLE `location` (
 --
 
 INSERT INTO `location` (`id`, `book_id`, `section`, `shelf`, `row`, `column1`, `current_count`, `timestamp`) VALUES
-(1, 1, 'ddd', 'sss', 12, 12, 12, '2017-02-13 22:15:44'),
-(2, 2, 'aaa', 'bbb', 11, 22, 33, '2017-02-13 22:15:44');
+(22, 32, 'Comp', 'A', 1, 3, 5, '2017-02-18 20:05:31'),
+(23, 33, 'Air_cond', 'B', 2, 1, 5, '2017-02-18 20:05:32'),
+(24, 34, 'Automob', 'A', 1, 2, 7, '2017-02-18 20:05:32'),
+(25, 35, 'Sens', 'C', 2, 3, 5, '2017-02-18 20:05:32'),
+(26, 36, 'Sens', 'D', 3, 2, 5, '2017-02-18 20:05:32'),
+(27, 37, 'Elect', 'B', 1, 2, 3, '2017-02-18 20:05:32'),
+(28, 38, 'Struct', 'B', 2, 2, 4, '2017-02-18 20:05:32'),
+(29, 39, 'Survey', 'A', 2, 1, 6, '2017-02-18 20:05:32'),
+(30, 40, 'Comp', 'C', 2, 2, 7, '2017-02-18 20:05:32');
 
 -- --------------------------------------------------------
 
@@ -124,15 +129,29 @@ INSERT INTO `location` (`id`, `book_id`, `section`, `shelf`, `row`, `column1`, `
 CREATE TABLE `students` (
   `id` int(11) NOT NULL,
   `name` text NOT NULL,
-  `current_year` int(11) NOT NULL,
+  `current_year` text NOT NULL,
   `branch` text NOT NULL,
   `mobile_number` text NOT NULL,
   `email` text NOT NULL,
   `password` text NOT NULL,
-  `auth_token` text NOT NULL,
-  `status` binary(1) NOT NULL,
+  `auth_token` text,
+  `status` int(1) NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `students`
+--
+
+INSERT INTO `students` (`id`, `name`, `current_year`, `branch`, `mobile_number`, `email`, `password`, `auth_token`, `status`, `timestamp`) VALUES
+(1, 'Test', 'T.E', 'Mechanical Engineering', '6546666666', 'test@test.com', 'asdasd', NULL, 0, '2017-02-20 12:18:33'),
+(2, 'Test 2', 'B.E', 'Electrical Engineering', '4556646546', 'test@test.com', 'aasdasd', NULL, 1, '2017-02-20 12:28:18'),
+(3, 'Rohan', 'S.E', 'IT Engineering', '9730333946', 'rohan@aveshan.com', 'test123', NULL, 1, '2017-02-20 12:43:25'),
+(4, 'Varad', 'T.E', 'Comp Engineering', '9730333946', 'rohan@aveshan.com', 'test123', NULL, 1, '2017-02-20 12:43:25'),
+(5, 'Chinmay', 'S.E', 'IT Engineering', '9730333946', 'rohan@aveshan.com', 'test123', NULL, 1, '2017-02-20 12:43:25'),
+(6, 'Nikita', 'B.E', 'IT Engineering', '9730333946', 'rohan@aveshan.com', 'test123', NULL, 1, '2017-02-20 12:43:25'),
+(7, 'Rohan', 'S.E', 'IT Engineering', '9730333946', 'rohan@aveshan.com', 'test123', NULL, 1, '2017-02-20 12:43:25'),
+(8, 'Rohan', 'S.E', 'IT Engineering', '9730333946', 'rohan@aveshan.com', 'test123', NULL, 1, '2017-02-20 12:43:25');
 
 -- --------------------------------------------------------
 
@@ -193,22 +212,22 @@ ALTER TABLE `students_books`
 -- AUTO_INCREMENT for table `admin_users`
 --
 ALTER TABLE `admin_users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'auto incrementing user_id of each user, unique index', AUTO_INCREMENT=13;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'auto incrementing user_id of each user, unique index', AUTO_INCREMENT=14;
 --
 -- AUTO_INCREMENT for table `books`
 --
 ALTER TABLE `books`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 --
 -- AUTO_INCREMENT for table `location`
 --
 ALTER TABLE `location`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 --
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT for table `students_books`
 --
