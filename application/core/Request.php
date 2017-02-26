@@ -7,8 +7,8 @@
  * This makes PHP code quality analyzer tools very happy.
  * @see http://php.net/manual/en/reserved.variables.request.php
  */
-class Request
-{
+class Request {
+
     /**
      * Gets/returns the value of a specific key of the POST super-global.
      * When using just Request::post('x') it will return the raw and untouched $_POST['x'], when using it like
@@ -18,8 +18,7 @@ class Request
      * @param bool $clean marker for optional cleaning of the var
      * @return mixed the key's value or nothing
      */
-    public static function post($key, $clean = false)
-    {
+    public static function post($key, $clean = false) {
         if (isset($_POST[$key])) {
             // we use the Ternary Operator here which saves the if/else block
             // @see http://davidwalsh.name/php-shorthand-if-else-ternary-operators
@@ -33,8 +32,7 @@ class Request
      * @param mixed $key key
      * @return mixed state of the checkbox
      */
-    public static function postCheckbox($key)
-    {
+    public static function postCheckbox($key) {
         return isset($_POST[$key]) ? 1 : NULL;
     }
 
@@ -43,8 +41,7 @@ class Request
      * @param mixed $key key
      * @return mixed the key's value or nothing
      */
-    public static function get($key)
-    {
+    public static function get($key) {
         if (isset($_GET[$key])) {
             return $_GET[$key];
         }
@@ -55,10 +52,27 @@ class Request
      * @param mixed $key key
      * @return mixed the key's value or nothing
      */
-    public static function cookie($key)
-    {
+    public static function cookie($key) {
         if (isset($_COOKIE[$key])) {
             return $_COOKIE[$key];
         }
     }
+
+    public static function postJson() {
+        $body = file_get_contents('php://input');
+        return json_decode($body, TRUE);
+    }
+
+    public static function hasHeader($key) {
+        if (array_key_exists($key, $header)) {
+            return TRUE;
+        }
+        return FALSE;
+    }
+
+    public static function getHeader($key) {
+        $header = apache_request_headers();
+        return $header[$key];
+    }
+
 }

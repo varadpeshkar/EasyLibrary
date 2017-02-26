@@ -5,7 +5,6 @@ class BooksModel {
     public static function getAllBooks() {
         $database = DatabaseFactory::getFactory()->getConnection();
         $sql = "SELECT * FROM books ORDER BY timestamp DESC";
-
         $query = $database->prepare($sql);
         $query->execute();
         return $query->fetchAll();
@@ -18,15 +17,11 @@ class BooksModel {
         $query->execute(array(':id' => $id));
         $book = $query->fetch();
 
-        
         $sql_location = "SELECT * FROM location WHERE book_id = :id LIMIT 1";
         $query_location = $database->prepare($sql_location);
         $query_location->execute(array(':id' => $book->id));
-        
         $book_location = $query_location->fetch();
-        
         $book->location = $book_location;
-        
         array_walk_recursive($book, 'Filter::XSSFilter');
 
         return $book;

@@ -124,4 +124,59 @@ class StudentsModel {
         return false;
     }
 
+    public static function authenticate($email, $password) {
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $result = new stdClass();
+        if (empty($email) || empty($password)) {
+            $result->success = false;
+            $result->code = 401;
+            $result->message = "Email or Password cannot be empty";
+            return $result;
+        }
+
+        $student = self::getStudentByEmail($email);
+
+        if ($student->password === $password) {
+            $sha = mt_rand(1, 90000) . $student->name;
+            $sha = sha1($sha);
+            $sql = "UPDATE students SET auth_token = :sha WHERE email = :email";
+            $query = $database->prepare($sql);
+            $query->execute(array(':email' => $email, ':sha' => $sha));
+            if ($query->rowCount() == 1) {
+                $result->success = true;
+                $result->code = 200;
+                $data = new stdClass();
+                $data->auth_token = $sha;
+                $result->data = $data;
+            } else {
+                $result->success = false;
+                $result->code = 500;
+                $result->message = "Unable to update user data.";
+            }
+        } else {
+            $result->success = false;
+            $result->code = 401;
+            $result->message = "Email or Password is wrong.";
+        }
+
+        return $result;
+    }
+
+    public static function getStudentByEmail($email) {
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $sql = "SELECT * FROM students WHERE email = :email LIMIT 1";
+        $query = $database->prepare($sql);
+        $query->execute(array(':email' => $email));
+        $student = $query->fetch();
+        return $student;
+    }
+
+    public static function verifyToken($email, $token) {
+        $student = self::getStudentByEmail($email);
+        if ($student->auth_token == $token) {
+            return TRUE;
+        }
+        return FALSE;
+    }
+
 }
