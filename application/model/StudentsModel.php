@@ -145,9 +145,7 @@ class StudentsModel {
             if ($query->rowCount() == 1) {
                 $result->success = true;
                 $result->code = 200;
-                $data = new stdClass();
-                $data->auth_token = $sha;
-                $result->data = $data;
+                $result->auth_token = $sha;
             } else {
                 $result->success = false;
                 $result->code = 500;

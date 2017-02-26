@@ -23,15 +23,30 @@ class StudentsController extends Controller {
     }
 
     public function getBooks() {
-        $result = new stdClass();
-        
+        $result = NULL;
+        $code = 200;
         if (StudentsModel::verifyToken(Request::getHeader("email"), Request::getHeader("auth_token"))){
-            $result->succss = TRUE;
+            $code = 200;
+            $result = BooksModel::getAllBooks();
         } else {
-            $result->succss = FALSE;
+            $code = 401;
         }
         
+        http_response_code($code);
+        $this->View->renderJSON($result);
+    }
+    
+    public function searchBook($key) {
+        $result = NULL;
+        $code = 200;
+        if (StudentsModel::verifyToken(Request::getHeader("email"), Request::getHeader("auth_token"))){
+            $code = 200;
+            $result = BooksModel::getBookByKey($key);
+        } else {
+            $code = 401;
+        }
         
+        http_response_code($code);
         $this->View->renderJSON($result);
     }
     

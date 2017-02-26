@@ -27,6 +27,14 @@ class BooksModel {
         return $book;
     }
 
+    public static function getBookByKey($key) {
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $sql = "SELECT * FROM books WHERE name LIKE :key OR author LIKE :key OR publisher LIKE :key OR department LIKE :key";
+        $query = $database->prepare($sql);
+        $query->execute(array(':key' => $key . '%'));
+        return $query->fetchAll();
+    }
+
     public static function importBooksFromExcel() {
         PHPExcel_Settings::setZipClass(PHPExcel_Settings::PCLZIP);
         if (isset($_FILES['books_excel'])) {
