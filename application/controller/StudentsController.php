@@ -25,29 +25,40 @@ class StudentsController extends Controller {
     public function getBooks() {
         $result = NULL;
         $code = 200;
-        if (StudentsModel::verifyToken(Request::getHeader("email"), Request::getHeader("auth_token"))){
+        if (StudentsModel::verifyToken(Request::getHeader("email"), Request::getHeader("auth_token"))) {
             $code = 200;
-            $result = BooksModel::getAllBooks();
+            $result = BooksModel::getAllBooksAPI();
         } else {
             $code = 401;
         }
-        
+
         http_response_code($code);
         $this->View->renderJSON($result);
     }
-    
+
+    public function status() {
+        $code = 200;
+        $result = new stdClass();
+        $result->success = true;
+        $result->code = 200;
+        $result->message = "Okay";
+
+        http_response_code($code);
+        $this->View->renderJSON($result);
+    }
+
     public function searchBook($key) {
         $result = NULL;
         $code = 200;
-        if (StudentsModel::verifyToken(Request::getHeader("email"), Request::getHeader("auth_token"))){
+        if (StudentsModel::verifyToken(Request::getHeader("email"), Request::getHeader("auth_token"))) {
             $code = 200;
             $result = BooksModel::getBookByKey($key);
         } else {
             $code = 401;
         }
-        
+
         http_response_code($code);
         $this->View->renderJSON($result);
     }
-    
+
 }

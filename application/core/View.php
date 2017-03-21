@@ -78,7 +78,7 @@ class View
     public function renderJSON($data)
     {
         header("Content-Type: application/json");
-        echo json_encode($data);
+        echo json_encode($data, JSON_NUMERIC_CHECK);
     }
 
     /**

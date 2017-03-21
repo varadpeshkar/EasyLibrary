@@ -10,6 +10,22 @@ class BooksModel {
         return $query->fetchAll();
     }
 
+    public static function getAllBooksAPI() {
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $sql = "SELECT * FROM books ORDER BY timestamp DESC";
+        $query = $database->prepare($sql);
+        $query->execute();
+        $all_books = array();
+
+        foreach ($query->fetchAll() as $book) {
+            array_walk_recursive($book, 'Filter::XSSFilter');
+            $book->location = self::getBookLocationById($book->id);
+            array_push($all_books, $book);
+        }
+
+        return $all_books;
+    }
+
     public static function getBookById($id) {
         $database = DatabaseFactory::getFactory()->getConnection();
         $sql = "SELECT * FROM books WHERE id = :id LIMIT 1";
@@ -27,12 +43,28 @@ class BooksModel {
         return $book;
     }
 
+    public static function getBookLocationById($id) {
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $sql_location = "SELECT * FROM location WHERE book_id = :id LIMIT 1";
+        $query_location = $database->prepare($sql_location);
+        $query_location->execute(array(':id' => $id));
+        return $query_location->fetch();
+    }
+
     public static function getBookByKey($key) {
         $database = DatabaseFactory::getFactory()->getConnection();
         $sql = "SELECT * FROM books WHERE name LIKE :key OR author LIKE :key OR publisher LIKE :key OR department LIKE :key";
         $query = $database->prepare($sql);
         $query->execute(array(':key' => $key . '%'));
-        return $query->fetchAll();
+        $all_books = array();
+
+        foreach ($query->fetchAll() as $book) {
+            array_walk_recursive($book, 'Filter::XSSFilter');
+            $book->location = self::getBookLocationById($book->id);
+            array_push($all_books, $book);
+        }
+
+        return $all_books;
     }
 
     public static function importBooksFromExcel() {
