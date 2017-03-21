@@ -61,4 +61,49 @@ class StudentsController extends Controller {
         $this->View->renderJSON($result);
     }
 
+    public function getAllDepartments() {
+        $result = NULL;
+        $code = 200;
+        if (StudentsModel::verifyToken(Request::getHeader("email"), Request::getHeader("auth_token"))) {
+            $code = 200;
+            $result = BooksModel::getDepartments();
+        } else {
+            $code = 401;
+        }
+
+        http_response_code($code);
+        $this->View->renderJSON($result);
+    }
+
+    public function getBooksByDepartment($department) {
+        $department = urldecode($department);
+        $department = str_replace(",", " ", $department);
+        $result = NULL;
+        $code = 200;
+        if (StudentsModel::verifyToken(Request::getHeader("email"), Request::getHeader("auth_token"))) {
+            $code = 200;
+            $result = BooksModel::getBooksByDepartment($department);
+        } else {
+            $code = 401;
+        }
+
+        http_response_code($code);
+        $this->View->renderJSON($result);
+    }
+    
+    public function getProfile(){
+        $result = NULL;
+        $code = 200;
+        $email = Request::getHeader("email");
+        if (StudentsModel::verifyToken(Request::getHeader("email"), Request::getHeader("auth_token"))) {
+            $code = 200;
+            $result = StudentsModel::getStudentByEmail($email);
+        } else {
+            $code = 401;
+        }
+
+        http_response_code($code);
+        $this->View->renderJSON($result);
+    }
+
 }

@@ -55,7 +55,31 @@ class BooksModel {
         $database = DatabaseFactory::getFactory()->getConnection();
         $sql = "SELECT * FROM books WHERE name LIKE :key OR author LIKE :key OR publisher LIKE :key OR department LIKE :key";
         $query = $database->prepare($sql);
-        $query->execute(array(':key' => $key . '%'));
+        $query->execute(array(':key' => '%'. $key . '%'));
+        $all_books = array();
+
+        foreach ($query->fetchAll() as $book) {
+            array_walk_recursive($book, 'Filter::XSSFilter');
+            $book->location = self::getBookLocationById($book->id);
+            array_push($all_books, $book);
+        }
+
+        return $all_books;
+    }
+
+    public static function getDepartments() {
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $sql = "SELECT DISTINCT department FROM books";
+        $query = $database->prepare($sql);
+        $query->execute();
+        return $query->fetchAll();
+    }
+
+    public static function getBooksByDepartment($department) {
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $sql = "SELECT * FROM books WHERE department LIKE :department";
+        $query = $database->prepare($sql);
+        $query->execute(array(':department' => '%'. $department . '%'));
         $all_books = array();
 
         foreach ($query->fetchAll() as $book) {
