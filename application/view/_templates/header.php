@@ -18,11 +18,9 @@
                 </div>
                 <div id="navbar" class="navbar-collapse collapse">
                     <?php if (Session::userIsLoggedIn()) { ?>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><a href="#">Settings</a></li>
-                        <li><a href="#">Profile</a></li>
-                        <li><a href="<?= Config::get("URL") ?>/login/logout">Logout</a></li>
-                    </ul>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="<?= Config::get("URL") ?>/login/logout">Logout</a></li>
+                        </ul>
                     <?php } ?>
                 </div>
             </div>

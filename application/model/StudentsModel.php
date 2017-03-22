@@ -177,4 +177,141 @@ class StudentsModel {
         return FALSE;
     }
 
+    public static function requestBookIssue($data) {
+        $book_id = $data['book_id'];
+        $student_id = $data['user_id'];
+        $status = "Pending";
+        $result = new stdClass();
+
+        $issued_books_count = sizeof(self::getIssueBooksForStudent($student_id));
+
+        if ($issued_books_count == 3) {
+            $result->success = false;
+            $result->error_msg = "You have already requested for 3 books";
+            $result->code = 200;
+            return $result;
+        }
+
+        $issue_date = date("Y-m-d");
+        $expiry_date = date('Y-m-d', strtotime(' + 15 days'));
+
+        $database = DatabaseFactory::getFactory()->getConnection();
+
+        $sql = "INSERT INTO students_books (user_id,book_id,issue_date,expiry_date,status)
+                    VALUES (:user_id, :book_id, CAST(:issue_date AS DATE),CAST( :expiry_date AS DATE), :status)";
+        $query = $database->prepare($sql);
+        $query->execute(array(':user_id' => $student_id,
+            ':book_id' => $book_id,
+            ':issue_date' => $issue_date,
+            ':expiry_date' => $expiry_date,
+            ':status' => $status
+        ));
+
+        $count = $query->rowCount();
+
+
+        if ($count == 1) {
+            $lastInsertId = $database->lastInsertId();
+            $result = self::getIssueBookForStudentById($lastInsertId);
+            $result->code = 200;
+            $result->success = true;
+            $result->error_msg = "";
+            return $result;
+        } else {
+            $result->success = false;
+            $result->error_msg = "Failed to issue";
+            $result->code = 200;
+            return $result;
+        }
+    }
+
+    public static function getIssueBookForStudentById($id) {
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $sql = "SELECT * FROM students_books WHERE id = :id LIMIT 1";
+        $query = $database->prepare($sql);
+        $query->execute(array(':id' => $id));
+
+        $request = $query->fetch();
+        $book = BooksModel::getBookById($request->book_id);
+        $request->book = $book;
+        return $request;
+    }
+
+    public static function getIssueBooksForStudent($id) {
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $sql = "SELECT * FROM students_books WHERE user_id = :id";
+        $query = $database->prepare($sql);
+        $query->execute(array(':id' => $id));
+        return $query->fetchAll();
+    }
+
+    public static function getAllIssueBookRequests() {
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $sql = "SELECT * FROM students_books WHERE status='pending' ORDER BY timestamp DESC";
+        $query = $database->prepare($sql);
+        $query->execute();
+        $all_requests = array();
+
+        foreach ($query->fetchAll() as $request) {
+            array_walk_recursive($request, 'Filter::XSSFilter');
+            $student = self::getStudentById($request->user_id);
+            $book = BooksModel::getBookById($request->book_id);
+            $request->student_name = $student->name;
+            $request->student_year = $student->current_year;
+            $request->student_email = $student->email;
+            $request->book_name = $book->name;
+            $request->book_isbn = $book->isbn;
+            array_push($all_requests, $request);
+        }
+
+        return $all_requests;
+    }
+
+    public static function approveBookRequest($id) {
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $sql = "SELECT * FROM students_books WHERE id = :id LIMIT 1";
+        $query = $database->prepare($sql);
+        $query->execute(array(':id' => $id));
+
+        $request = $query->fetch();
+
+        $current_count = BooksModel::getBookCurrentCount($request->book_id);
+
+        if ($current_count == 0) {
+            $status = "Rejected";
+        } else {
+            $status = "Approved";
+            BooksModel::reduceCurrentBookCount($request->book_id);
+        }
+
+        $sql_update_status = "UPDATE students_books SET status=:status WHERE id= :id";
+        $query_update = $database->prepare($sql_update_status);
+
+        $query_update->execute(array(':id' => $id,
+            ':status' => $status));
+        $count_query = $query_update->rowCount();
+        if ($count_query == 1 && $status == "Approved") {
+            return true;
+        }
+        return false;
+    }
+
+    public static function getAllRequests($email) {
+        $student = self::getStudentByEmail($email);
+
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $sql = "SELECT * FROM students_books WHERE user_id = :student_id";
+        $query = $database->prepare($sql);
+        $query->execute(array(':student_id' => $student->id));
+        $all_request = array();
+
+        foreach ($query->fetchAll() as $request) {
+            $book = BooksModel::getBookById($request->book_id);
+            $request->book = $book;
+            array_push($all_request, $request);
+        }
+
+        return $all_request;
+    }
+
 }

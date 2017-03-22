@@ -68,11 +68,11 @@ class IndexController extends Controller {
             Redirect::to('index/students');
         }
     }
-    
+
     public function addStudentsBulk() {
         $this->View->render('index/addStudentsBulk');
     }
-   
+
     public function addStudentsBulk_action() {
         $addStudents = StudentsModel::importStudentsFromExcel();
         if ($addStudents) {
@@ -80,9 +80,21 @@ class IndexController extends Controller {
         }
     }
 
-    
     public function students() {
         $this->View->render('index/students', array('students' => StudentsModel::getAllStudents()));
+    }
+
+    public function pendingRequests() {
+        $this->View->render('index/pendingRequests', array('requests' => StudentsModel::getAllIssueBookRequests()));
+    }
+
+    public function approveBookRequest($id) {
+        $approve = StudentsModel::approveBookRequest($id);
+        if ($approve) {
+            Redirect::to('index/pendingRequests?approved=true');
+        } else {
+            Redirect::to('index/pendingRequests?approved=false');
+        }
     }
 
 }

@@ -55,7 +55,7 @@ class BooksModel {
         $database = DatabaseFactory::getFactory()->getConnection();
         $sql = "SELECT * FROM books WHERE name LIKE :key OR author LIKE :key OR publisher LIKE :key OR department LIKE :key";
         $query = $database->prepare($sql);
-        $query->execute(array(':key' => '%'. $key . '%'));
+        $query->execute(array(':key' => '%' . $key . '%'));
         $all_books = array();
 
         foreach ($query->fetchAll() as $book) {
@@ -79,7 +79,7 @@ class BooksModel {
         $database = DatabaseFactory::getFactory()->getConnection();
         $sql = "SELECT * FROM books WHERE department LIKE :department";
         $query = $database->prepare($sql);
-        $query->execute(array(':department' => '%'. $department . '%'));
+        $query->execute(array(':department' => '%' . $department . '%'));
         $all_books = array();
 
         foreach ($query->fetchAll() as $book) {
@@ -213,6 +213,32 @@ class BooksModel {
             return false;
         }
         return false;
+    }
+
+    public static function reduceCurrentBookCount($id) {
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $book_location = self::getBookLocationById($id);
+        $current_count = $book_location->current_count;
+        if ($current_count > 0) {
+            $new_count = $current_count - 1;
+            $sql_update = "UPDATE location SET current_count=:new_count WHERE book_id=:book_id";
+            $query = $database->prepare($sql_update);
+            $query->execute(array(':new_count' => $new_count,
+                ':book_id' => $id
+            ));
+            $count_query = $query->rowCount();
+            if ($count_query == 1) {
+                return true;
+            }
+            return false;
+        } else {
+            return false;
+        }
+    }
+
+    public static function getBookCurrentCount($id) {
+        $book_location = self::getBookLocationById($id);
+        return $book_location->current_count;
     }
 
 }

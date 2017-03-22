@@ -90,14 +90,43 @@ class StudentsController extends Controller {
         http_response_code($code);
         $this->View->renderJSON($result);
     }
-    
-    public function getProfile(){
+
+    public function getProfile() {
         $result = NULL;
         $code = 200;
         $email = Request::getHeader("email");
         if (StudentsModel::verifyToken(Request::getHeader("email"), Request::getHeader("auth_token"))) {
             $code = 200;
             $result = StudentsModel::getStudentByEmail($email);
+        } else {
+            $code = 401;
+        }
+
+        http_response_code($code);
+        $this->View->renderJSON($result);
+    }
+
+    public function requestBookIssue() {
+        $result = NULL;
+        $code = 200;
+        $data = Request::postJson();
+        if (StudentsModel::verifyToken(Request::getHeader("email"), Request::getHeader("auth_token"))) {
+            $result = StudentsModel::requestBookIssue($data);
+            $code = $result->code;
+        } else {
+            $code = 401;
+        }
+
+        http_response_code($code);
+        $this->View->renderJSON($result);
+    }
+
+    public function getAllBookIssueRequests() {
+        $result = new stdClass();
+        $code = 200;
+        $email = Request::getHeader("email");
+        if (StudentsModel::verifyToken(Request::getHeader("email"), Request::getHeader("auth_token"))) {
+            $result = StudentsModel::getAllRequests($email);
         } else {
             $code = 401;
         }
