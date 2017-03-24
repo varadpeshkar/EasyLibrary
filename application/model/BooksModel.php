@@ -109,6 +109,34 @@ class BooksModel {
         return $all_books;
     }
 
+    public static function getBookRecommendations($email) {
+        $student = StudentsModel::getStudentByEmail($email);
+        $branch = $student->branch;
+        $year = $student->current_year;
+        $year_wo_dot = str_replace(".", "", $year);
+
+        $year_lower = strtolower($year);
+        $year_wo_dot_lower = strtolower($year_wo_dot);
+
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $sql = "SELECT * FROM books WHERE department LIKE :department OR tags LIKE :year OR tags LIKE :year_wo_dot OR tags LIKE :year_lower OR tags LIKE :year_wo_dot_lower";
+        $query = $database->prepare($sql);
+        $query->execute(array(':department' => '%' . $branch . '%',
+            ':year' => '%' . $year . '%',
+            ':year_wo_dot' => '%' . $year_wo_dot . '%',
+            ':year_lower' => '%' . $year_lower . '%',
+            ':year_wo_dot_lower' => '%' . $year_wo_dot_lower . '%'));
+        $all_books = array();
+
+        foreach ($query->fetchAll() as $book) {
+            array_walk_recursive($book, 'Filter::XSSFilter');
+            $book->location = self::getBookLocationById($book->id);
+            array_push($all_books, $book);
+        }
+
+        return $all_books;
+    }
+
     public static function importBooksFromExcel() {
         PHPExcel_Settings::setZipClass(PHPExcel_Settings::PCLZIP);
         if (isset($_FILES['books_excel'])) {

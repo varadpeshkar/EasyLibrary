@@ -25,7 +25,7 @@
                 <div class="panel-heading text-center" style="font-size: 18px">Total Issued</div>
                 <div class="panel-body">
                     <h1 class="text-center text-success " style="font-weight: bold"><?php echo $this->stats->issued; ?></h1>
-                    <center><a href="<?php echo Config::get("URL"); ?>index/pendingRequests">View</a></center>
+                    <center><a href="<?php echo Config::get("URL"); ?>index/issuedBooks">View</a></center>
                 </div>
             </div>    
         </div>
@@ -35,7 +35,7 @@
                 <div class="panel-heading text-center" style="font-size: 18px">Total Students</div>
                 <div class="panel-body">
                     <h1 class="text-center text-primary" style="font-weight: bold"><?php echo $this->stats->students; ?></h1>
-                    <center><a href="<?php echo Config::get("URL"); ?>/index/students">View</a></center>
+                    <center><a href="<?php echo Config::get("URL"); ?>index/students/All">View</a></center>
                 </div>
             </div>    
         </div>

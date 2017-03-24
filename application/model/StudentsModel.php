@@ -192,7 +192,7 @@ class StudentsModel {
         $student = $query->fetch();
         return $student;
     }
-
+    
     public static function verifyToken($email, $token) {
         $student = self::getStudentByEmail($email);
         if ($student->auth_token == $token) {

@@ -91,6 +91,21 @@ class StudentsController extends Controller {
         $this->View->renderJSON($result);
     }
 
+    public function getRecommendations() {
+        $result = NULL;
+        $code = 200;
+        $email = Request::getHeader("email");
+        if (StudentsModel::verifyToken(Request::getHeader("email"), Request::getHeader("auth_token"))) {
+            $code = 200;
+            $result = BooksModel::getBookRecommendations($email);
+        } else {
+            $code = 401;
+        }
+
+        http_response_code($code);
+        $this->View->renderJSON($result);
+    }
+
     public function getProfile() {
         $result = NULL;
         $code = 200;

@@ -81,7 +81,14 @@
                             <div class="form-group">
                                 <label class="col-md-4 control-label" for="textinput">Department</label>  
                                 <div class="col-md-4">
-                                    <input id="textinput" name="department_name" type="text" placeholder="name" class="form-control input-md" required="">
+                                    <select id="branch" name="department_name" class="form-control" required>
+                                        <option value="Computer Engineering">Computer Engineering</option>
+                                        <option value="IT Engineering">IT Engineering</option>
+                                        <option value="Mechanical Engineering">Mechanical Engineering</option>
+                                        <option value="Electrical Engineering">Electrical Engineering</option>
+                                        <option value="Electronics Engineering">Electronics Engineering</option>
+                                        <option value="Civil Engineering">Civil Engineering</option>
+                                    </select>
                                     <span class="help-block">Provide department name</span>  
                                 </div>
                             </div>
@@ -98,8 +105,8 @@
                             <div class="form-group">
                                 <label class="col-md-4 control-label" for="textinput">Tags</label>  
                                 <div class="col-md-4">
-                                    <input id="textinput" name="tags" type="text" placeholder="electornics, signals, etc" class="form-control input-md">
-                                    <span class="help-block">Provide Tags for searching</span>  
+                                    <input id="textinput" name="tags" type="text" placeholder="fe,se,te,be,comp,it etc" class="form-control input-md">
+                                    <span class="help-block">Provide Tags like branch, year Eg: fe,se,te,be</span>  
                                 </div>
                             </div>
 

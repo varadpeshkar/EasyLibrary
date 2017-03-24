@@ -48,7 +48,14 @@
                             <div class="form-group">
                                 <label class="col-md-4 control-label" for="textinput">Department</label>  
                                 <div class="col-md-4">
-                                    <input id="textinput" name="department_name" type="text" value="<?php echo $this->book->department ?>" placeholder="name" class="form-control input-md" required="">
+                                    <select id="branch" name="branch" class="form-control">
+                                        <option value="Computer Engineering" <?php if ($this->book->department == 'Computer Engineering') { ?> selected="true" <?php } ?>>Computer Engineering</option>
+                                        <option value="IT Engineering" <?php if ($this->book->department == 'IT Engineering') { ?> selected="true" <?php } ?>>IT Engineering</option>
+                                        <option value="Mechanical Engineering" <?php if ($this->book->department == 'Mechanical Engineering') { ?> selected="true" <?php } ?>>Mechanical Engineering</option>
+                                        <option value="Electrical Engineering" <?php if ($this->book->department == 'Electrical Engineering') { ?> selected="true" <?php } ?>>Electrical Engineering</option>
+                                        <option value="Electronics Engineering"<?php if ($this->book->department == 'Electronics Engineering') { ?> selected="true" <?php } ?>>Electronics Engineering</option>
+                                        <option value="Civil Engineering" <?php if ($this->book->department == 'Civil Engineering') { ?> selected="true" <?php } ?>>Civil Engineering</option>
+                                    </select>
                                     <span class="help-block">Provide department name</span>  
                                 </div>
                             </div>

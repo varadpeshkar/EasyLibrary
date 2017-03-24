@@ -17,7 +17,7 @@
 
     </head>
     <body>
-        <nav class="navbar navbar-inverse navbar-static-top">
+        <nav class="navbar navbar-info navbar-static-top">
             <div class="container">
                 <div class="navbar-header">
                     <a class="navbar-brand" href="<?= Config::get("URL") ?>">Easy Library</a>
