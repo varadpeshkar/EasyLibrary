@@ -1,0 +1,12 @@
+/* 
+    Created on : May 21, 2016, 12:37:57 AM
+    Author     : gchinmay
+*/
+.navbar-brand-cust {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    top: 0;
+    text-align: center;
+    margin: auto;
+}

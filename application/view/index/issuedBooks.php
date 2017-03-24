@@ -3,15 +3,28 @@
 
         <?php
         $this->renderFeedbackMessages();
-        if (isset($_GET['approved'])) {
-            $approved = $_GET['approved'];
+        if (isset($_GET['renewed'])) {
+            $approved = $_GET['renewed'];
             if ($approved == "true") {
                 ?>
-                <script type="text/javascript">alert("Request approved"); window.location = "pendingRequests"</script>
+                <script type="text/javascript">alert("Book renewed"); window.location = "issuedBooks"</script>
                 <?php
             } else {
                 ?>
-                <script type="text/javascript">alert("Request rejected due to insufficient books"); window.location = "pendingRequests"</script>
+                <script type="text/javascript">alert("Book Renew Failed"); window.location = "issuedBooks"</script>
+                <?php
+            }
+        }
+
+        if (isset($_GET['returned'])) {
+            $approved = $_GET['returned'];
+            if ($approved == "true") {
+                ?>
+                <script type="text/javascript">alert("Book returned"); window.location = "issuedBooks"</script>
+                <?php
+            } else {
+                ?>
+                <script type="text/javascript">alert("Book return failed"); window.location = "issuedBooks"</script>
                 <?php
             }
         }
@@ -23,7 +36,7 @@
         </div>
         <div class="col-lg-10">
             <div class="panel panel-info">
-                <div class="panel-heading">Pending Requests</div>
+                <div class="panel-heading">Issued Books</div>
                 <div class="panel-body">
                     <?php if (isset($this->requests) && sizeof($this->requests) > 0) { ?>
                         <table class="table table-bordered">
@@ -36,7 +49,8 @@
                                     <th>Student Year</th>
                                     <th>Issue Date</th>
                                     <th>Expiry Date</th>
-                                    <th>Actions</th>
+                                    <th>Renew</th>
+                                    <th>Return</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -49,14 +63,16 @@
                                         <td><?= $request->student_year ?></td>
                                         <td><?= $request->issue_date ?></td>
                                         <td><?= $request->expiry_date ?></td>
-                                        <td><a href="<?php echo Config::get('URL'); ?>index/approveBookRequest/<?php echo $request->id; ?>" class="btn btn-success" ><span class="glyphicon glyphicon-ok"></span></a></td>
+                                        <td><a href="<?php echo Config::get('URL'); ?>index/renewBook/<?php echo $request->id; ?>" class="btn btn-success" ><span class="glyphicon glyphicon-refresh"></span></a></td>
+                                        <td><a href="<?php echo Config::get('URL'); ?>index/returnBook/<?php echo $request->id; ?>" class="btn btn-danger" ><span class="glyphicon glyphicon-repeat"></span></a>
+                                        </td>
 
                                     </tr>
                                 <?php } ?>
                             </tbody>
                         </table>
                     <?php } else { ?>
-                        <h4 style="margin-top: 0px;" class="text-danger">No Pending Requests</h4>
+                        <h4 style="margin-top: 0px;">No Issued Books</h4>
                     <?php } ?>
 
                 </div>

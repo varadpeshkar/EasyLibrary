@@ -6,55 +6,22 @@
         </div>
     </div>
     <div class="col-lg-10">
-        <?php if (isset($this->books)) { ?>
-            <div class="panel panel-info">
-                <div class="panel-heading">All Books</div>
-                <div class="panel-body">
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>ISBN</th>
-                                <th>Name</th>
-                                <th>Author</th>
-                                <th>Publisher</th>
-                                <th>Department</th>
-                                <th>Tags</th>
-                                <th>View Details</th>
-                                <th>Edit</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($this->books as $book) { ?>
-                                <tr>
-                                    <td><?= $book->isbn ?></td>
-                                    <td><?= $book->name ?></td>
-                                    <td><?= $book->author ?></td>
-                                    <td><?= $book->publisher ?></td>
-                                    <td><?= $book->department ?></td>
-                                    <td><?= $book->tags ?></td>
-                                    <td><a href="<?php echo Config::get('URL'); ?>index/bookDetails/<?php echo $book->id; ?>" class="btn btn-success" ><span class="glyphicon glyphicon-eye-open"></span></a></td>
-                                    <td><a href="<?php echo Config::get('URL'); ?>index/editBookDetails/<?php echo $book->id; ?>" class="btn btn-warning" ><span class="glyphicon glyphicon-edit"></span></a></td>
-                                </tr>
-                            <?php } ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+        <div class="panel panel-info">
+            <div class="panel-heading">Edit Book Details</div>
+            <div class="panel-body">
 
-        <?php } ?>
-
-        <?php if (isset($this->addBook)) { ?>
-            <div class="panel panel-info">
-                <div class="panel-heading">Add A Book <a href="<?= Config::get("URL") ?>index/addBooksBulk" style="margin: 0px; padding: 0" class="btn btn-inverse pull-right">Import Excel</a></div>
-                <div class="panel-body">
-                    <form class="form-horizontal" method="POST" action="<?= Config::get("URL") ?>index/addbook_action">
+                <?php if (isset($this->book) && $this->book != null) { ?>
+                    <form class="form-horizontal" method="POST" action="<?= Config::get("URL") ?>index/editBook_action/<?php $this->book->id ?>">
                         <fieldset>
+
+                            <!-- Form Name -->
+
 
                             <!-- Text input-->
                             <div class="form-group">
                                 <label class="col-md-4 control-label" for="textinput">Book</label>  
                                 <div class="col-md-4">
-                                    <input id="textinput" name="book_name" type="text" placeholder="name" class="form-control input-md" required="">
+                                    <input id="textinput" value="<?php $this->book->name ?>" name="book_name" type="text" placeholder="name" class="form-control input-md" required="">
                                     <span class="help-block">Provide book name.</span>  
                                 </div>
                             </div>
@@ -153,8 +120,8 @@
 
                         </fieldset>
                     </form>
-                </div>
+                <?php } ?>
             </div>
-        <?php } ?>
+        </div>
     </div>
 </div>

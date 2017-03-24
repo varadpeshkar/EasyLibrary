@@ -1,4 +1,11 @@
 
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="<?php echo Config::get('URL'); ?>js/jquery.js"></script>
+<script src="<?php echo Config::get('URL'); ?>js/bootstrap.min.js"></script>
+<script src="<?php echo Config::get('URL'); ?>js/material.min.js"></script>
+<script src="<?php echo Config::get('URL'); ?>js/ripple.js"></script>
+<script src="<?php echo Config::get('URL'); ?>js/datepicker.min.js"></script>
+<script src="<?php echo Config::get('URL'); ?>js/validator.js"></script>
+<script src="<?php echo Config::get('URL'); ?>js/application.js"></script>
+<script src="<?php echo Config::get('URL'); ?>js/printThis.js"></script>
 </body>
 </html>

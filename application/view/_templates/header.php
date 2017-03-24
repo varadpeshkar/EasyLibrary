@@ -7,7 +7,13 @@
         <!-- send empty favicon fallback to prevent user's browser hitting the server for lots of favicon requests resulting in 404s -->
         <link rel="icon" href="data:;base64,=">
         <!-- CSS -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link rel="stylesheet" href="<?php echo Config::get('URL'); ?>css/bootstrap.min.css"/> 
+        <link rel="stylesheet" href="<?php echo Config::get('URL'); ?>css/material.min.css" />
+        <link rel="stylesheet" href="<?php echo Config::get('URL'); ?>css/ripple.min.css" />
+        <link rel="stylesheet" href="<?php echo Config::get('URL'); ?>css/style.css" />
+        <link rel="stylesheet" href="<?php echo Config::get('URL'); ?>css/navbar.css" />
+        <link rel="stylesheet" href="<?php echo Config::get('URL'); ?>css/datepicker.min.css" />
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     </head>
     <body>

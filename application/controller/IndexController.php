@@ -16,7 +16,7 @@ class IndexController extends Controller {
      * when user moves to /index or enter your application at base level
      */
     public function index() {
-        $this->View->render('index/index');
+        $this->View->render('index/dashboard', array('stats' => StudentsModel::getStatistics()));
     }
 
     public function books() {
@@ -65,7 +65,7 @@ class IndexController extends Controller {
     public function addStudent_action() {
         $addStudent = StudentsModel::addNewStudents();
         if ($addStudent) {
-            Redirect::to('index/students');
+            Redirect::to('index/students/All');
         }
     }
 
@@ -80,12 +80,16 @@ class IndexController extends Controller {
         }
     }
 
-    public function students() {
-        $this->View->render('index/students', array('students' => StudentsModel::getAllStudents()));
+    public function students($year) {
+        $this->View->render('index/students', array('students' => StudentsModel::getAllStudents($year), 'year' => $year));
     }
 
     public function pendingRequests() {
         $this->View->render('index/pendingRequests', array('requests' => StudentsModel::getAllIssueBookRequests()));
+    }
+
+    public function issuedBooks() {
+        $this->View->render('index/issuedBooks', array('requests' => StudentsModel::getAllIssuedBooks()));
     }
 
     public function approveBookRequest($id) {
@@ -94,6 +98,52 @@ class IndexController extends Controller {
             Redirect::to('index/pendingRequests?approved=true');
         } else {
             Redirect::to('index/pendingRequests?approved=false');
+        }
+    }
+
+    public function renewBook($id) {
+        $approve = StudentsModel::renewBook($id);
+        if ($approve) {
+            Redirect::to('index/issuedBooks?renewed=true');
+        } else {
+            Redirect::to('index/issuedBooks?renewed=false');
+        }
+    }
+
+    public function returnBook($id) {
+        $approve = StudentsModel::returnBook($id);
+        if ($approve) {
+            Redirect::to('index/issuedBooks?returned=true');
+        } else {
+            Redirect::to('index/issuedBooks?returned=false');
+        }
+    }
+
+    public function editStudent($id) {
+        $student = StudentsModel::getStudentById($id);
+        $this->View->render('index/editStudent', array('student' => $student));
+    }
+
+    public function editStudent_action($id) {
+        $student = StudentsModel::updateStudent($id);
+        if ($student) {
+            Redirect::to('index/students/All');
+        } else {
+            Redirect::to('index/editStudent/' . $id);
+        }
+    }
+
+    public function editBookDetails($id) {
+        $book = BooksModel::getOnlyBookById($id);
+        $this->View->render("index/editBookDetails", array('book' => $book));
+    }
+
+    public function editBook_action($id) {
+        $student = StudentsModel::updateStudent($id);
+        if ($student) {
+            Redirect::to('index/students/All');
+        } else {
+            Redirect::to('index/editStudent/' . $id);
         }
     }
 

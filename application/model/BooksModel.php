@@ -43,6 +43,24 @@ class BooksModel {
         return $book;
     }
 
+    public static function getOnlyBookById($id) {
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $sql = "SELECT * FROM books WHERE id = :id";
+        $query = $database->prepare($sql);
+        $query->execute(array(':id' => $id));
+        $book = $query->fetch();
+
+        /*
+          $sql_location = "SELECT * FROM location WHERE book_id = :id LIMIT 1";
+          $query_location = $database->prepare($sql_location);
+          $query_location->execute(array(':id' => $book->id));
+          $book_location = $query_location->fetch();
+          $book->location = $book_location;
+          array_walk_recursive($book, 'Filter::XSSFilter');
+         */
+        return $book;
+    }
+
     public static function getBookLocationById($id) {
         $database = DatabaseFactory::getFactory()->getConnection();
         $sql_location = "SELECT * FROM location WHERE book_id = :id LIMIT 1";
@@ -234,6 +252,23 @@ class BooksModel {
         } else {
             return false;
         }
+    }
+
+    public static function increaseCurrentBookCount($id) {
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $book_location = self::getBookLocationById($id);
+        $current_count = $book_location->current_count;
+        $new_count = $current_count + 1;
+        $sql_update = "UPDATE location SET current_count=:new_count WHERE book_id=:book_id";
+        $query = $database->prepare($sql_update);
+        $query->execute(array(':new_count' => $new_count,
+            ':book_id' => $id
+        ));
+        $count_query = $query->rowCount();
+        if ($count_query == 1) {
+            return true;
+        }
+        return false;
     }
 
     public static function getBookCurrentCount($id) {

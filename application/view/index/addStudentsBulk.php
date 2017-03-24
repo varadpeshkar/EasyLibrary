@@ -1,14 +1,14 @@
 <div class="container">
     <?php $this->renderFeedbackMessages(); ?>
-    <div class="col-lg-3">
+    <div class="col-lg-2">
         <div class="panel panel-primary">
                <?php require Config::get('PATH_VIEW') . 'index/menu.php' ?>
         </div>
     </div>
-    <div class="col-lg-9">
-        
-        <a href="<?= Config::get("URL") ?>index/downloadFormatStudents" class="btn btn-info pull-right">Download Format</a>
-        <br/>
+    <div class="col-lg-10">
+        <div class="panel panel-info">
+            <div class="panel-heading">Add Students Bulk <a href="<?= Config::get("URL") ?>index/downloadFormatStudents" style="margin: 0px; padding: 0" class="btn btn-inverse pull-right">Download Format</a></div>
+            <div class="panel-body">
 
         <form class="form-horizontal"   method="post" enctype="multipart/form-data" action="<?= Config::get("URL") ?>index/addStudentsBulk_action">
             <fieldset>
@@ -20,6 +20,7 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="filebutton">Select File</label>
                     <div class="col-md-4">
+                        <input type="text" readonly="" class="form-control" placeholder="Browse...">
                         <input id="filebutton" name="students_excel" class="input-file" accept=".xlsx application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-exce" type="file">
                     </div>
                 </div>

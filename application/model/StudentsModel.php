@@ -2,13 +2,19 @@
 
 class StudentsModel {
 
-    public static function getAllStudents() {
+    public static function getAllStudents($year) {
         $database = DatabaseFactory::getFactory()->getConnection();
-        $sql = "SELECT * FROM students ORDER BY timestamp DESC";
-
-        $query = $database->prepare($sql);
-        $query->execute();
-        return $query->fetchAll();
+        if ($year == "All") {
+            $sql = "SELECT * FROM students ORDER BY timestamp DESC";
+            $query = $database->prepare($sql);
+            $query->execute();
+            return $query->fetchAll();
+        } else {
+            $sql = "SELECT * FROM students WHERE current_year=:year ORDER BY timestamp DESC";
+            $query = $database->prepare($sql);
+            $query->execute(array(':year' => $year));
+            return $query->fetchAll();
+        }
     }
 
     public static function getStudentById($id) {
@@ -16,20 +22,7 @@ class StudentsModel {
         $sql = "SELECT * FROM students WHERE id = :id LIMIT 1";
         $query = $database->prepare($sql);
         $query->execute(array(':id' => $id));
-        $book = $query->fetch();
-
-
-        $sql_location = "SELECT * FROM location WHERE book_id = :id LIMIT 1";
-        $query_location = $database->prepare($sql_location);
-        $query_location->execute(array(':id' => $book->id));
-
-        $book_location = $query_location->fetch();
-
-        $book->location = $book_location;
-
-        array_walk_recursive($book, 'Filter::XSSFilter');
-
-        return $book;
+        return $query->fetch();
     }
 
     public static function importStudentsFromExcel() {
@@ -113,6 +106,37 @@ class StudentsModel {
             ':email' => $email,
             ':password' => $password,
             ':status' => $status
+        ));
+
+
+        $count = $query->rowCount();
+        if ($count == 1) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public static function updateStudent($id) {
+        $name = strip_tags(Request::post('name'));
+        $current_year = strip_tags(Request::post('current_year'));
+        $branch = strip_tags(Request::post('branch'));
+        $mobile_number = strip_tags(Request::post('mobile_number'));
+
+        return self::udpateStudentDetails($id, $name, $current_year, $branch, $mobile_number);
+    }
+
+    public static function udpateStudentDetails($id, $name, $current_year, $branch, $mobile_number) {
+        $database = DatabaseFactory::getFactory()->getConnection();
+
+        // write new users data into database
+        $sql = "UPDATE students SET name=:name, current_year=:current_year, branch=:branch,mobile_number=:mobile_number WHERE id=:id";
+        $query = $database->prepare($sql);
+        $query->execute(array(':name' => $name,
+            ':current_year' => $current_year,
+            ':branch' => $branch,
+            ':mobile_number' => $mobile_number,
+            ':id' => $id
         ));
 
 
@@ -247,7 +271,29 @@ class StudentsModel {
 
     public static function getAllIssueBookRequests() {
         $database = DatabaseFactory::getFactory()->getConnection();
-        $sql = "SELECT * FROM students_books WHERE status='pending' ORDER BY timestamp DESC";
+        $sql = "SELECT * FROM students_books WHERE status='Pending' ORDER BY timestamp DESC";
+        $query = $database->prepare($sql);
+        $query->execute();
+        $all_requests = array();
+
+        foreach ($query->fetchAll() as $request) {
+            array_walk_recursive($request, 'Filter::XSSFilter');
+            $student = self::getStudentById($request->user_id);
+            $book = BooksModel::getBookById($request->book_id);
+            $request->student_name = $student->name;
+            $request->student_year = $student->current_year;
+            $request->student_email = $student->email;
+            $request->book_name = $book->name;
+            $request->book_isbn = $book->isbn;
+            array_push($all_requests, $request);
+        }
+
+        return $all_requests;
+    }
+
+    public static function getAllIssuedBooks() {
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $sql = "SELECT * FROM students_books WHERE status='Approved' ORDER BY timestamp DESC";
         $query = $database->prepare($sql);
         $query->execute();
         $all_requests = array();
@@ -296,6 +342,55 @@ class StudentsModel {
         return false;
     }
 
+    public static function renewBook($id) {
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $sql = "SELECT * FROM students_books WHERE id = :id LIMIT 1";
+        $query = $database->prepare($sql);
+        $query->execute(array(':id' => $id));
+
+        $request = $query->fetch();
+
+        $current_expiry_date = $request->expiry_date;
+
+        $new_expiry_date = date('Y-m-d', strtotime($current_expiry_date . ' + 15 days'));
+
+        $sql_update_expiry = "UPDATE students_books SET expiry_date = CAST(:new_expiry_date AS DATE) WHERE id= :id";
+        $query_update = $database->prepare($sql_update_expiry);
+
+        $query_update->execute(array(':id' => $id,
+            ':new_expiry_date' => $new_expiry_date));
+        $count_query = $query_update->rowCount();
+        if ($count_query == 1) {
+            return true;
+        }
+        return false;
+    }
+
+    public static function returnBook($id) {
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $sql = "SELECT * FROM students_books WHERE id = :id LIMIT 1";
+        $query = $database->prepare($sql);
+        $query->execute(array(':id' => $id));
+
+        $request = $query->fetch();
+
+        $increase = BooksModel::increaseCurrentBookCount($request->book_id);
+
+        if ($increase) {
+            $sql_delete = "DELETE FROM students_books WHERE id = :id";
+            $query = $database->prepare($sql_delete);
+            $query->execute(array(':id' => $id));
+            $count_query = $query->rowCount();
+            if ($count_query == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
     public static function getAllRequests($email) {
         $student = self::getStudentByEmail($email);
 
@@ -312,6 +407,39 @@ class StudentsModel {
         }
 
         return $all_request;
+    }
+
+    public static function getStatistics() {
+        $database = DatabaseFactory::getFactory()->getConnection();
+
+        $sql_students = "SELECT * FROM students";
+        $sql_books = "SELECT * FROM books";
+        $sql_pending_requests = "SELECT * FROM students_books WHERE status='Pending'";
+        $sql_issued_requests = "SELECT * FROM students_books WHERE status='Approved'";
+
+        $query_students = $database->prepare($sql_students);
+        $query_students->execute();
+        $students_count = $query_students->rowCount();
+
+        $query_books = $database->prepare($sql_books);
+        $query_books->execute();
+        $books_count = $query_books->rowCount();
+
+        $query_pending = $database->prepare($sql_pending_requests);
+        $query_pending->execute();
+        $pending_count = $query_pending->rowCount();
+
+        $query_issued = $database->prepare($sql_issued_requests);
+        $query_issued->execute();
+        $issued_count = $query_issued->rowCount();
+
+        $stats = new stdClass();
+        $stats->students = $students_count;
+        $stats->books = $books_count;
+        $stats->pending = $pending_count;
+        $stats->issued = $issued_count;
+
+        return $stats;
     }
 
 }
