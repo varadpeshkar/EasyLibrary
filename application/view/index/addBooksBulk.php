@@ -7,7 +7,7 @@
     </div>
     <div class="col-lg-10">
         <div class="panel panel-info">
-            <div class="panel-heading">Add Books Bulk <a href="<?= Config::get("URL") ?>index/downloadFormat" style="margin: 0; padding: 0;" class="btn btn-inverse pull-right">Download Format</a></div>
+            <div class="panel-heading">Add Books Bulk <a href="<?= Config::get("URL") ?>data/books_bulk_import.xlsx" style="margin: 0; padding: 0;" class="btn btn-inverse pull-right">Download Format</a></div>
             <div class="panel-body">
                 
                 <br/>

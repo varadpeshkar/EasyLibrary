@@ -233,6 +233,58 @@ class BooksModel {
         return false;
     }
 
+    public static function editBookDetails($id) {
+        $isbn = strip_tags(Request::post('isbn_number'));
+        $book = strip_tags(Request::post('book_name'));
+        $author = strip_tags(Request::post('author_name'));
+        $publisher = strip_tags(Request::post('publisher_name'));
+        $department = strip_tags(Request::post('department_name'));
+        $tags = strip_tags(Request::post('tags'));
+        $section = strip_tags(Request::post('section'));
+        $shelf = strip_tags(Request::post('shelf'));
+        $row = strip_tags(Request::post('row'));
+        $column = strip_tags(Request::post('column'));
+        $current_count = strip_tags(Request::post('current_count'));
+
+        return self::updateBookDetails($id, $isbn, $book, $author, $publisher, $department, $tags, $section, $shelf, $row, $column, $current_count);
+    }
+
+    public static function updateBookDetails($id, $isbn, $book, $author, $publisher, $department, $tags, $section, $shelf, $row, $column, $current_count) {
+        $database = DatabaseFactory::getFactory()->getConnection();
+
+        // write new users data into database
+        $sql = "UPDATE books SET isbn=:isbn, name=:name, author=:author, publisher=:publisher, department=:department, tags=:tags WHERE id=:id";
+        $query = $database->prepare($sql);
+        $query->execute(array(':isbn' => $isbn,
+            ':name' => $book,
+            ':author' => $author,
+            ':publisher' => $publisher,
+            ':department' => $department,
+            ':tags' => $tags,
+            ':id' => $id
+        ));
+
+
+        $count = $query->rowCount();
+
+        $sql_location = "UPDATE location SET section=:section, shelf=:shelf, row=:row, column1=:column, current_count=:current_count WHERE book_id=:book_id";
+        $query_location = $database->prepare($sql_location);
+        $query_location->execute(array(':book_id' => $id,
+            ':section' => $section,
+            ':shelf' => $shelf,
+            ':row' => $row,
+            ':column' => $column,
+            ':current_count' => $current_count,
+        ));
+        $count_location = $query_location->rowCount();
+
+        if ($count == 1 || $count_location == 1) {
+            return true;
+        }
+
+        return false;
+    }
+
     public static function reduceCurrentBookCount($id) {
         $database = DatabaseFactory::getFactory()->getConnection();
         $book_location = self::getBookLocationById($id);

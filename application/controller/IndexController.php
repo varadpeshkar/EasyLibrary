@@ -134,16 +134,16 @@ class IndexController extends Controller {
     }
 
     public function editBookDetails($id) {
-        $book = BooksModel::getOnlyBookById($id);
+        $book = BooksModel::getBookById($id);
         $this->View->render("index/editBookDetails", array('book' => $book));
     }
 
     public function editBook_action($id) {
-        $student = StudentsModel::updateStudent($id);
+        $student = BooksModel::editBookDetails($id);
         if ($student) {
-            Redirect::to('index/students/All');
+            Redirect::to('index/bookDetails/' . $id);
         } else {
-            Redirect::to('index/editStudent/' . $id);
+            Redirect::to('index/editBookDetails/' . $id);
         }
     }
 

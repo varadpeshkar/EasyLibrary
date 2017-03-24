@@ -7,7 +7,7 @@
     </div>
     <div class="col-lg-10">
         <div class="panel panel-info">
-            <div class="panel-heading">Add Students Bulk <a href="<?= Config::get("URL") ?>index/downloadFormatStudents" style="margin: 0px; padding: 0" class="btn btn-inverse pull-right">Download Format</a></div>
+            <div class="panel-heading">Add Students Bulk <a href="<?= Config::get("URL") ?>data/students_bulk_import.xlsx" style="margin: 0px; padding: 0" class="btn btn-inverse pull-right">Download Format</a></div>
             <div class="panel-body">
 
         <form class="form-horizontal"   method="post" enctype="multipart/form-data" action="<?= Config::get("URL") ?>index/addStudentsBulk_action">
