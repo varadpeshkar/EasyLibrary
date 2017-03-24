@@ -48,7 +48,7 @@
                             <div class="form-group">
                                 <label class="col-md-4 control-label" for="textinput">Department</label>  
                                 <div class="col-md-4">
-                                    <select id="branch" name="branch" class="form-control">
+                                    <select id="branch" name="department_name" class="form-control">
                                         <option value="Computer Engineering" <?php if ($this->book->department == 'Computer Engineering') { ?> selected="true" <?php } ?>>Computer Engineering</option>
                                         <option value="IT Engineering" <?php if ($this->book->department == 'IT Engineering') { ?> selected="true" <?php } ?>>IT Engineering</option>
                                         <option value="Mechanical Engineering" <?php if ($this->book->department == 'Mechanical Engineering') { ?> selected="true" <?php } ?>>Mechanical Engineering</option>
