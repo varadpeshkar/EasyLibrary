@@ -76,7 +76,7 @@ class IndexController extends Controller {
     public function addStudentsBulk_action() {
         $addStudents = StudentsModel::importStudentsFromExcel();
         if ($addStudents) {
-            Redirect::to('index/students');
+            Redirect::to('index/students/All');
         }
     }
 
